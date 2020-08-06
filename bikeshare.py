@@ -31,7 +31,7 @@ def choice(prompt, choices=('y', 'n')):
             if list(filter(lambda x: x in choices, choice)) == choice:
                 break
 
-        prompt = ("\nPlease verify the format and be sure to enter a valid option:\n>")
+        prompt = ("\nPlease, verify the format and be sure to enter a valid option:\n>")
 
     return choice
 
