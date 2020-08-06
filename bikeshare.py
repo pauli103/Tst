@@ -44,7 +44,7 @@ def get_filters():
         (str) day - name of the day(s) of week to filter
     """
 
-    print("\n\nLet's verify some US bikeshare information\n")
+    print("\nLet's verify some US bikeshare information\n")
 
     print("Type end if you wish to exit the program.\n")
 
