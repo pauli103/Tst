@@ -13,16 +13,38 @@ weekdays = ('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday',
 
 months = ('january', 'february', 'march', 'april', 'may', 'june')
 
+def choice(prompt, choices=('y', 'n')):
+    """Return a valid input from the user given an array of possible answers.    """
+
+    while True:
+        choice = input(prompt).lower().strip()
+        # terminate if end is pressed
+        if choice == 'end':
+            raise SystemExit
+        # triggers if you enter only one name
+        elif ',' not in choice:
+            if choice in choices:
+                break
+        # triggers if you enter more than one name
+        elif ',' in choice:
+            choice = [i.strip().lower() for i in choice.split(',')]
+            if list(filter(lambda x: x in choices, choice)) == choice:
+                break
+
+        prompt = ("\nPlease verify the format and be sure to enter a valid option:\n>")
+
+    return choice
+
 
 def get_filters():
     """Ask user to specify city(ies) and filters, month(s) and weekday(s).
     Returns:
         (str) city - name of the city(ies) to analyze
-        (str) month - name of the month(s) to filter by
+        (str) month - name of the month(s) to filter
         (str) day - name of the day(s) of week to filter
     """
 
-    print("\n\nHello! Let\'s explore some US bikeshare data!\n")
+    print("\n\nLet's verify some US bikeshare information\n")
 
     print("Type end if you wish to exit the program.\n")
 
@@ -33,13 +55,11 @@ def get_filters():
         month = choice("\nBetween January to June, which month(s) do you "
                        "want do filter data from? "
                        " Use commas to separate the names.\n>", months)
-        day = choice("\nWhich weekday(s) do you want to filter the bikeshare"
-        " data from? "
+        day = choice("\nWhich weekday(s) do you want to filter the bikeshare data from? "
                        " Use commas to separate the names.\n>", weekdays)
 
         # confirm input
-        confirmation = choice("\nPlease confirm these are the filter(s) you"
-        " want to use."
+        confirmation = choice("\nPlease confirm these are the filter(s) you want to use."
                               "\n\n City(ies): {}\n Month(s): {}\n Weekday(s)"
                               ": {}\n\n [y] Yes\n [n] No\n\n>"
                               .format(city, month, day))
@@ -81,13 +101,13 @@ def load_data(city, month, day):
     else:
         df = pd.read_csv(CITY_DATA[city])
 
-    # create columns to show the  statistics
+    # create columns to see the  statistics
     df['Start Time'] = pd.to_datetime(df['Start Time'])
     df['Month'] = df['Start Time'].dt.month
     df['day_of_week'] = df['Start Time'].dt.weekday_name
     df['Start Hour'] = df['Start Time'].dt.hour
 
-    # filter month and weekday to viw the data in two new DataFrames
+    # filter month and weekday see the data in two new DataFrames
     if isinstance(month, list):
         df = pd.concat(map(lambda month: df[df['Month'] ==
                            (months.index(month)+1)], month))
@@ -286,38 +306,9 @@ def raw_data(df, mark_place):
     return mark_place
 
 
-def main():
-    while True:
-        click.clear()
-        city, month, day = get_filters()
-        df = load_data(city, month, day)
-
-        mark_place = 0
-        while True:
-            select_data = choice("\nPlease select the type of information you need:"
-                                 "\n\n [ts] Time Stats\n [ss] "
-                                 "Station Stats\n [tds] Trip Duration Stats\n "
-                                 "[us] User Stats\n [rd] Display Raw Data\n "
-                                 "[r] Restart\n\n>",
-                                 ('ts', 'ss', 'tds', 'us', 'rd', 'r'))
-            click.clear()
-            if select_data == 'ts':
-                time_stats(df)
-            elif select_data == 'ss':
-                station_stats(df)
-            elif select_data == 'tds':
-                trip_duration_stats(df)
-            elif select_data == 'us':
-                user_stats(df, city)
-            elif select_data == 'rd':
-                mark_place = raw_data(df, mark_place)
-            elif select_data == 'r':
-                break
-
-        restart = choice("\nWould you like to restart?\n\n[y]Yes\n[n]No\n\n>")
-        if restart.lower() != 'y':
-            break
-
+       restart = input('\nWould you like to restart? Enter yes or no.\n')
+       if restart.lower() != 'yes':
+           break
 
 if __name__ == "__main__":
     main()
