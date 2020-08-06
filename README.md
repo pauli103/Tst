@@ -13,4 +13,4 @@ new_york_city.csv
 washington.csv
 
 ### Credits
-Udacity and Paula.
+Udacity and Paula del Villar.
