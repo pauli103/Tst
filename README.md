@@ -5,7 +5,7 @@
 Bikeshare
 
 ### Description
-Describe what your project is about and what it does
+Search bike share documentation.
 
 ### Files used
 Include the files used
